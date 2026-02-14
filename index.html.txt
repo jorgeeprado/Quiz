@@ -184,7 +184,7 @@
             </div>
             
             <p style="margin-top: 20px;">✨ Mañana nos vemos con mássss ✨</p>
-            <p style="font-size: 0.7rem; color: #aaa;">Hecho por Jorge en HTML | San Valentín 2026</p>
+            <p style="font-size: 0.7rem; color: #aaa;">Hecho en HTML por Jorge | San Valentín 2026</p>
         </div>
     </div>
 
@@ -209,7 +209,6 @@
         function validate(step, correctAns) {
             const userAns = document.getElementById('ans' + step).value.toLowerCase().trim();
             const errorElement = document.getElementById('err' + step);
-            
             if (userAns === correctAns) {
                 errorElement.style.display = 'none';
                 nextStep(step);
@@ -225,9 +224,7 @@
             if (isCorrect) {
                 btn.classList.add('correct');
                 document.getElementById('correct-notice').style.display = 'block';
-                setTimeout(() => {
-                    nextStep(4);
-                }, 1500);
+                setTimeout(() => { nextStep(4); }, 1500);
             } else {
                 btn.classList.add('wrong');
                 const card = document.querySelector('.card');
@@ -250,13 +247,5 @@
             btnNo.style.top = y + 'px';
         });
     </script>
-
-    <style>
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
-        }
-    </style>
 </body>
 </html>
