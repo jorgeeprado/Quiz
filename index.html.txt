@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Bienvenida a nuestro Quiz en HTML! ❤️</title>
+    <style>
+        :root {
+            --pink: #ff4d6d;
+            --dark-pink: #c9184a;
+            --leaf: #2d6a4f;
+            --error: #d00000;
+            --success: #2b9348;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #ffe5ec;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            text-align: center;
+            width: 380px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.5s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h2 { color: var(--dark-pink); font-size: 1.4rem; margin-bottom: 20px; }
+        p { color: #444; line-height: 1.5; }
+
+        input[type="text"] {
+            width: 80%;
+            padding: 12px;
+            border: 2px solid #ffccd5;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            outline: none;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .hint { font-size: 0.8rem; color: #888; margin-top: 5px; }
+        .lowercase-warning { font-size: 0.75rem; color: var(--pink); font-weight: bold; margin-top: 10px; }
+        .error-msg { color: var(--error); font-size: 0.9rem; margin-top: 10px; display: none; }
+
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 15px;
+            background: var(--pink);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        button:hover { background: var(--dark-pink); transform: translateY(-2px); }
+
+        .test-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .test-btn { background: #f0f0f0; color: #333; margin-top: 0; }
+        .test-btn.wrong { background: var(--error) !important; color: white; }
+        .test-btn.correct { background: var(--success) !important; color: white; }
+        #correct-notice { color: var(--success); font-weight: bold; margin-top: 15px; display: none; }
+
+        .flower-container { margin-top: 20px; display: flex; justify-content: center; gap: 15px; }
+        .flower { position: relative; width: 40px; height: 150px; }
+        .petal {
+            width: 30px; height: 30px; background: #ff758f;
+            border-radius: 50% 50% 0 50%; transform: rotate(45deg);
+            position: absolute; top: 0; left: 5px;
+        }
+        .petal::after {
+            content: ''; width: 30px; height: 30px; background: #ff758f;
+            border-radius: 50% 50% 50% 0; position: absolute;
+            transform: rotate(-90deg); left: 12px;
+        }
+        .stem { width: 5px; height: 120px; background: var(--leaf); position: absolute; top: 25px; left: 18px; border-radius: 5px; }
+
+        #btn-no { position: absolute; background: #999; }
+        .bg-heart { position: absolute; color: rgba(255, 77, 109, 0.15); animation: float 6s infinite linear; z-index: 1; }
+        
+        @keyframes float {
+            0% { transform: translateY(110vh) rotate(0deg); }
+            100% { transform: translateY(-10vh) rotate(360deg); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="step active" id="step0">
+            <div style="font-size: 50px;">😊❤️</div>
+            <h2>¡Bienvenida a nuestro quiz en HTML!</h2>
+            <p>Si no lo pasas no mereces estar conmigo :(</p>
+            <p style="font-style: italic; font-size: 0.9rem;">Seguro que no... ¡jijiji!</p>
+            <button onclick="nextStep(0)">Empezar el reto</button>
+        </div>
+
+        <div class="step" id="step1">
+            <h2>Pregunta 1 🧐</h2>
+            <p>¿Dónde fue nuestra primera cena?</p>
+            <input type="text" id="ans1" placeholder="Escribe aquí...">
+            <p class="hint">(Lleva artículo al principio)</p>
+            <p class="lowercase-warning">⚠️ Escribe todo en minúscula</p>
+            <p id="err1" class="error-msg">Has fallado, ¡inténtalo de nuevo! ❌</p>
+            <button onclick="validate(1, 'el cronicas')">Siguiente</button>
+        </div>
+
+        <div class="step" id="step2">
+            <h2>Pregunta 2 💡</h2>
+            <p>¿Cuál es mi juego favorito?</p>
+            <input type="text" id="ans2" placeholder="Escribe aquí...">
+            <p class="lowercase-warning">⚠️ Escribe todo en minúscula</p>
+            <p id="err2" class="error-msg">Has fallado, ¡inténtalo de nuevo! ❌</p>
+            <button onclick="validate(2, 'pokemon')">Siguiente</button>
+        </div>
+
+        <div class="step" id="step3">
+            <h2>Pregunta 3 📅</h2>
+            <p>¿Qué día te contesté a tu bonito vestido negro?</p>
+            <input type="text" id="ans3" placeholder="Escribe aquí...">
+            <p class="hint">(Nota: no vale mirar la fecha)</p>
+            <p class="lowercase-warning">⚠️ Escribe todo en minúscula</p>
+            <p id="err3" class="error-msg">Has fallado, ¡inténtalo de nuevo! ❌</p>
+            <button onclick="validate(3, '14 de septiembre')">Siguiente</button>
+        </div>
+
+        <div class="step" id="step4">
+            <h2>Pregunta 4 👑</h2>
+            <p>¿Quién es la persona más guapa de este mundo?</p>
+            <div class="test-options">
+                <button class="test-btn" onclick="checkTest(this, false)">Yo</button>
+                <button class="test-btn" onclick="checkTest(this, false)">Tu</button>
+                <button class="test-btn" onclick="checkTest(this, true)">Jorge</button>
+                <button class="test-btn" onclick="checkTest(this, false)">Ana</button>
+            </div>
+            <p id="correct-notice">¡Correctooooooo! ✨</p>
+        </div>
+
+        <div class="step" id="step5">
+            <div style="font-size: 50px;">💖</div>
+            <h2>¡Lo has recordado todo!</h2>
+            <p>Ahora dime...<br><strong>¿Quieres ser mi San Valentín?</strong></p>
+            <div style="height: 120px; position: relative; margin-top: 20px;">
+                <button id="btn-yes" onclick="showReward()">¡SÍ! ❤️</button>
+                <button id="btn-no">No</button>
+            </div>
+        </div>
+
+        <div class="step" id="reward">
+            <h2>Felicidadeees, unas flores para ti. 🌹</h2>
+            <p>Te quiero mucho. Gracias por recordarlo todo.</p>
+            <p style="font-size: 0.85rem; color: #666;">Seguro que no has intentado darle a que no, ¿verdad? 🤔</p>
+            
+            <div class="flower-container">
+                <div class="flower"><div class="petal"></div><div class="stem"></div></div>
+                <div class="flower"><div class="petal" style="background:#ff0a54;"></div><div class="stem"></div></div>
+                <div class="flower"><div class="petal"></div><div class="stem"></div></div>
+            </div>
+            
+            <p style="margin-top: 20px;">✨ Mañana nos vemos con mássss ✨</p>
+            <p style="font-size: 0.7rem; color: #aaa;">Hecho por Jorge en HTML | San Valentín 2026</p>
+        </div>
+    </div>
+
+    <script>
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('bg-heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 6000);
+        }
+        setInterval(createHeart, 400);
+
+        function nextStep(current) {
+            document.getElementById('step' + current).classList.remove('active');
+            document.getElementById('step' + (current + 1)).classList.add('active');
+        }
+
+        function validate(step, correctAns) {
+            const userAns = document.getElementById('ans' + step).value.toLowerCase().trim();
+            const errorElement = document.getElementById('err' + step);
+            
+            if (userAns === correctAns) {
+                errorElement.style.display = 'none';
+                nextStep(step);
+            } else {
+                errorElement.style.display = 'block';
+                const card = document.querySelector('.card');
+                card.style.animation = 'none';
+                setTimeout(() => card.style.animation = 'shake 0.3s', 10);
+            }
+        }
+
+        function checkTest(btn, isCorrect) {
+            if (isCorrect) {
+                btn.classList.add('correct');
+                document.getElementById('correct-notice').style.display = 'block';
+                setTimeout(() => {
+                    nextStep(4);
+                }, 1500);
+            } else {
+                btn.classList.add('wrong');
+                const card = document.querySelector('.card');
+                card.style.animation = 'none';
+                setTimeout(() => card.style.animation = 'shake 0.3s', 10);
+            }
+        }
+
+        function showReward() {
+            document.getElementById('step5').classList.remove('active');
+            document.getElementById('reward').classList.add('active');
+        }
+
+        const btnNo = document.getElementById('btn-no');
+        btnNo.addEventListener('mouseover', () => {
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            btnNo.style.position = 'fixed';
+            btnNo.style.left = x + 'px';
+            btnNo.style.top = y + 'px';
+        });
+    </script>
+
+    <style>
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+    </style>
+</body>
+</html>
